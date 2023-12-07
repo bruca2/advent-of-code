@@ -1,20 +1,23 @@
 import time as T
-from aoc_2023 import *
+import aoc_2023
 
 class t:
     def startTime(self):
         self.start = T.time()        
     
     def printTime(self):
-        print(f'Elapsed {(T.time()-self.start)*1000} ms')
+        print(f'Elapsed {(T.time()-self.start)*1000:.0f} ms')
+
+days = map(aoc_2023.__dict__.get, aoc_2023.__all__)
 
 cl = t()
 cl.startTime()
-for day in range(1,8):
+
+for day in days:
     cd = t()
     cd.startTime()
-    print(f'Day{day}')
-    eval(f'aoc_2023_{day}.run()')
+    print(f'Day {day.__name__}')
+    day.run()
     cd.printTime()
     print('========================')
     
