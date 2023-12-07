@@ -1,3 +1,5 @@
+import os
+import os.path
 import time as T
 import aoc_2023
 
@@ -17,6 +19,7 @@ for day in days:
     cd = t()
     cd.startTime()
     print(f'Day {day.__name__}')
+    os.chdir(os.path.dirname(day.__file__))
     day.run()
     cd.printTime()
     print('========================')
