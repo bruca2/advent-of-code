@@ -39,9 +39,12 @@ def __replacements(hand):
     cnt = defaultdict(int)
     for c in hand:
         cnt[c]+=1
-    l = list(cnt.items())    
-    l.sort(key=lambda x: x[1])
-    return [hand.replace('J',c[0]) for c in l]
+    if len(cnt) == 1 and hand[0] == 'J':
+        return ['AAAAA'] 
+    else:
+        l = list(cnt.items())    
+        l.sort(key=lambda x: x[1])
+        return [hand.replace('J',c[0]) for c in l]
     
 def run():
     global cards
@@ -70,7 +73,7 @@ def run():
             else:          
                 typ.append((h,__get_type(h)))
 
-        typ.sort(key=cmp_to_key(__sorter))
+        typ.sort(key=cmp_to_key(__sorter))        
         r = 1
         total = 0
         for t in typ:
