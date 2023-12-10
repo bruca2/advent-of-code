@@ -21,7 +21,9 @@ class t:
         plt.scatter(X,T)
         plt.show()
 
-days = map(aoc_2023.__dict__.get, aoc_2023.__all__)
+all = [d[1] for d in sorted([(int(day.split('_')[-1]),day) for day in aoc_2023.__all__])]
+
+days = map(aoc_2023.__dict__.get, all)
 times = []
 
 cl = t()
