@@ -1,39 +1,41 @@
 from collections import defaultdict
 
+def HASH(s):
+    h = 0
+    for c in s:
+        h += ord(c)
+        h *= 17
+        h %= 256     
+    return h
+
 def run():    
     values = open('input15.txt', 'r').read().split(',')   
-    total = 0 
-    boxes = defaultdict(list)
-    for v in values:               
-        opidx = v.find('=')
-        opidx = v.find('-') if opidx == -1 else opidx
-        l = v[:opidx]
-        pt1 = cv = 0
-        for c in v:
-            pt1 += ord(c)
-            pt1 *= 17
-            pt1 %= 256      
-        for c in l:
-            cv += ord(c)
-            cv *= 17
-            cv %= 256        
-        total += pt1
-        if v[opidx] == '=':
-            for idx, lens in enumerate(boxes[cv]):
-                if lens[0] == l:
-                    boxes[cv][idx] = (l,int(v[opidx+1]))
-                    break
+    pt1 = pt2 = 0 
+    for v in values:
+        pt1 += HASH(v)
+    
+    boxes = [[] for _ in range(256)]
+    lenses = defaultdict(int)    
+    for v in values:
+        if '=' in v:            
+            label = v[:-2]             
+            h = HASH(label)
+            if label in lenses:                
+                lenses[label] = int(v[-1])
             else:
-                boxes[cv].append((l,int(v[opidx+1])))
-        else:
-             for idx, lens in enumerate(boxes[cv]):
-                if lens[0] == l:
-                    del boxes[cv][idx]
-                    break        
-        power = 0
-        for boxk,boxv in boxes.items():            
-            for idx,lens in enumerate(boxv,1):                
-                power += (boxk+1)*idx*lens[1]
-
-    print(total)                
-    print(power)    
+                boxes[h].append(label)                
+                lenses[label] = int(v[-1])
+        else:            
+            label = v[:-1]             
+            h = HASH(label)
+            if label in lenses:
+                del lenses[label]
+                boxes[h].remove(label)
+        
+    for box_num in range(len(boxes)):
+        box = boxes[box_num]
+        for idx, lens in enumerate(box):
+            pt2 += (box_num+1)*(idx+1)*lenses[lens]
+    
+    print(pt1)                
+    print(pt2)
