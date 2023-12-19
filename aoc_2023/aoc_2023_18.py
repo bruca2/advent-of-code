@@ -1,59 +1,35 @@
-from collections import deque
+def _get_verts(lines,hex):
+    row = col = 0
+    vertices = [(row,col)]    
+    per = 0    
+    for line in lines:        
+        if hex:
+            ins = line.split()[2]
+            s = int(ins[2:-2],16)       
+            d = int(ins[-2:-1])
+        else:
+            d,s,_ = line.split()
+            s = int(s)
+        if d == 0 or d == 'R':
+            col += s
+        elif d == 2 or d == 'L':
+            col -= s
+        elif d == 3 or d == 'U':
+            row -= s
+        else:
+            row += s        
+        per += s
+        vertices.append((row,col))
+    
+    max_row = max(vertices)[1]    
+    s = per//2 + 1
+    for idx in range(len(vertices)-1):
+        s += (vertices[idx+1][1]-vertices[idx][1])*(max_row-vertices[idx+1][0])
 
-def _bfs(dig,s):
-    dirs = [(0,1),(1,0),(0,-1),(-1,0)]
-    v = set([s])
-    q = deque([s])
-    while q:
-        pos = q.pop()
-        r,c = pos
-        for dr,dc in dirs:
-            if (r+dr,c+dc) in v or (r+dr,c+dc) in dig:
-                continue
-            q.appendleft((r+dr,c+dc))
-            v.add((r+dr,c+dc))
-    return v
+    print(s)
 
 def run():    
     lines = open('input18.txt', 'r').read().splitlines()     
-    per = 0
-    dig = set()
-    row = col = 0
-    dig.add((row,col))
-    for line in lines:
-        sr,sc = row,col
-        d, s, c = line.split()
-        s = int(s)
-        if d == 'R':
-            col += s
-        elif d == 'L':
-            col -= s
-        elif d == 'U':
-            row -= s
-        else:
-            row += s
-        per += s
-        er = row
-        ec = col
-        if row < sr:
-            sr,er = row,sr
-        if col < sc:
-            sc,ec = col,sc
-        for ir in range(sr, er+1):
-            for ic in range(sc, ec+1):
-                dig.add((ir,ic))          
-    
-    v = _bfs(dig,(1,2))
-    
-    # for row in range(15):
-    #     for col in range(15):
-    #         if (row,col) in dig:
-    #             print('#',end='')
-    #         elif (row,col) in v:
-    #             print('x',end='')
-    #         else:
-    #             print('.',end='')
-    #     print()
-    print(len(v)+per)    
-run()
-    
+    _get_verts(lines,False)
+    _get_verts(lines,True)
+        
