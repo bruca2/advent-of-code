@@ -80,4 +80,4 @@ def run():
         for v in simp.values():
             temp *= len(v)
         total += temp
-    print(total)
+    print(total-1)
