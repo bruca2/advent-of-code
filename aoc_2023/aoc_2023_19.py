@@ -57,7 +57,7 @@ def run():
     print(_count(partsStr, conds))
     
     _dfs(conds, 'in', '')
-    total = 1    
+    total = 0
     for path in _paths:
         minValues = {'x':1,'m':1,'a':1,'s':1}
         maxValues = {'x':4000,'m':4000,'a':4000,'s':4000}
@@ -79,6 +79,5 @@ def run():
         for l,u in zip(minValues.values(),maxValues.values()):
              temp *= u-l+1
         total += temp
-    print(total-1)
-
-run()
+    print(total)
+    
