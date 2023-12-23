@@ -54,30 +54,31 @@ def run():
         conds[name] = cond.replace('}','')        
     conds['A'] = 'A'
     conds['R'] = 'R'
-
     print(_count(partsStr, conds))
     
     _dfs(conds, 'in', '')
-    total = 1
+    total = 1    
     for path in _paths:
+        minValues = {'x':1,'m':1,'a':1,'s':1}
+        maxValues = {'x':4000,'m':4000,'a':4000,'s':4000}
         path = path.lstrip(',').replace('(,','(')    
-        simp = {l:set([i for i in range(1,4001)]) for l in "xmas"}    
-        for expr in path.split(','):
-            if '<=' in expr:
-                expr = expr.split('<=')
-                simp[expr[0]] = simp[expr[0]].intersection(set([i for i in range(1,int(expr[1])+1)]))
-            elif '>=' in expr:
-                expr = expr.split('>=')
-                simp[expr[0]] = simp[expr[0]].intersection(set([i for i in range(int(expr[1]),4001)]))
-            if '<' in expr:
-                expr = expr.split('<')
-                simp[expr[0]] = simp[expr[0]].intersection(set([i for i in range(1,int(expr[1]))]))
+        for expr in path.split(','):                        
+            if '>=' in expr:
+                sp = expr.split('>=')
+                minValues[sp[0]] = max(minValues[sp[0]], int(sp[1]))            
+            elif '<=' in expr:
+                sp = expr.split('<=')
+                maxValues[sp[0]] = min(maxValues[sp[0]], int(sp[1]))
             elif '>' in expr:
-                expr = expr.split('>')
-                simp[expr[0]] = simp[expr[0]].intersection(set([i for i in range(int(expr[1])+1,4001)]))
-        
+                sp = expr.split('>')
+                minValues[sp[0]] = max(minValues[sp[0]], int(sp[1])+1)
+            elif '<' in expr:
+                sp = expr.split('<')
+                maxValues[sp[0]] = min(maxValues[sp[0]], int(sp[1])-1)
         temp = 1
-        for v in simp.values():
-            temp *= len(v)
+        for l,u in zip(minValues.values(),maxValues.values()):
+             temp *= u-l+1
         total += temp
     print(total-1)
+
+run()
