@@ -48,9 +48,3 @@ def run():
                         cnt += 1
                         to_fall.append(may_fall)
     print(cnt)
-            
-
-
-
-
-run()
