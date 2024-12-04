@@ -3,14 +3,14 @@ import importlib.util
 import time as T
 import matplotlib.pyplot as plt
 
-scripts_folder = os.path.dirname(__file__) + "\\aoc_2023"
+scripts_folder = os.path.dirname(__file__) + "\\aoc_2024"
 os.chdir(scripts_folder)
 
 script_files = [f for f in os.listdir(scripts_folder) if f.endswith('.py')]
 
 plt.xlabel('Problem number')
 plt.ylabel('Time (ms)')
-plt.title('AOC 2023 solving times')
+plt.title('AOC 2024 solving times')
 
 times = []
 for script_file in script_files:
@@ -36,4 +36,4 @@ r = range(1,len(script_files)+1)
 plt.xticks(r)
 plt.scatter(r,times)
 plt.plot(r,times)
-plt.show() 
+plt.show()
