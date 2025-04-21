@@ -55,3 +55,5 @@ def run():
         speed.append([int(x) for x in s.split(', ')])
     _pt1(pos,speed)
     _pt2(pos,speed)
+
+run()

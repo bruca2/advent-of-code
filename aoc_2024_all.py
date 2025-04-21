@@ -26,7 +26,7 @@ for script_file in script_files:
         start = T.time()      
         module.run()        
         elapsed = (T.time()-start)*1000
-        print(f'Elapsed {elapsed:.0f} ms')
+        print(f'Elapsed {elapsed:.2f} ms')
         print('========================================')
         times.append(elapsed)
     else:
