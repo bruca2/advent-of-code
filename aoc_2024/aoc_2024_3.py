@@ -4,7 +4,7 @@ def run():
     lines = open('input3.txt', 'r').read()
 
     v = 0    
-    l = re.findall('mul\((\d{1,3})\,(\d{1,3})\)', lines)
+    l = re.findall(r'mul\((\d{1,3})\,(\d{1,3})\)', lines)
     for t in l:
         v += int(t[0])*int(t[1])
     print(v)
@@ -16,7 +16,7 @@ def run():
         lastState = state         
         if state:
             x = lines.find("don't()")   
-            l = re.findall('mul\((\d{1,3})\,(\d{1,3})\)', lines[:x] if x > -1 else lines)
+            l = re.findall(r'mul\((\d{1,3})\,(\d{1,3})\)', lines[:x] if x > -1 else lines)
             for t in l:
                 v += int(t[0])*int(t[1])          
             if x > -1:                

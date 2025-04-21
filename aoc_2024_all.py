@@ -3,7 +3,7 @@ import importlib.util
 import time as T
 import matplotlib.pyplot as plt
 
-scripts_folder = os.path.dirname(__file__) + "\\aoc_2024"
+scripts_folder = os.path.dirname(__file__) + "/aoc_2024"
 os.chdir(scripts_folder)
 
 script_files = [f for f in os.listdir(scripts_folder) if f.endswith('.py')]
@@ -36,4 +36,8 @@ r = range(1,len(script_files)+1)
 plt.xticks(r)
 plt.scatter(r,times)
 plt.plot(r,times)
-plt.show()
+output_image = "aoc_2024_all.png"
+plt.savefig(output_image)
+
+import subprocess
+subprocess.run(['xdg-open', output_image])

@@ -38,6 +38,3 @@ def run():
     print(t1)
     print(t1+t2)    
 
-
-       
-run()
