@@ -2,11 +2,17 @@ import os
 import importlib.util
 import time as T
 import matplotlib.pyplot as plt
+import re
+
+def sorter(s):
+    match = re.search(r'_(\d+).py', s)
+    return int(match.group(1)) if match else float('inf')
 
 scripts_folder = os.path.dirname(__file__) + "/aoc_2023"
 os.chdir(scripts_folder)
 
 script_files = [f for f in os.listdir(scripts_folder) if f.endswith('.py')]
+script_files = sorted(script_files, key=sorter)
 
 plt.xlabel('Problem number')
 plt.ylabel('Time (ms)')
@@ -36,4 +42,8 @@ r = range(1,len(script_files)+1)
 plt.xticks(r)
 plt.scatter(r,times)
 plt.plot(r,times)
-plt.savefig("aoc_2023_all.png")
+output_image = "aoc_2023_all.png"
+plt.savefig(output_image)
+
+import subprocess
+subprocess.run(['xdg-open', output_image])

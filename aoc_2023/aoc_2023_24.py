@@ -20,16 +20,11 @@ def _pt1(pos, speed):
                     cnt += 1
     print(cnt)
 
-def _pt2(pos, speed):
-    #couldn't find a way to solve this without a SAT module
-    #used z3 as it's the best one for integer solutions
-    #rock equations 
-    #x = x0 + v_x*t
-    #y = y0 + v_y*t
-    #z = z0 + v_z*t
-    xr,vxr,yr,vyr,zr,vzr = Ints('xr vxr yr vyr zr vzr')    
+def _check(values, pos, speed):
+    xr,vxr,yr,vyr,zr,vzr = Ints('xr vxr yr vyr zr vzr')
     s = Solver()
     l = locals()
+    s.add(xr == values[0], yr == values[1], zr == values[2], vxr == values[3], vyr == values[4], vzr == values[5])
     for i in range(len(pos)):
         var_str_x = 'x'+str(i)
         var_str_y = 'y'+str(i)
@@ -41,9 +36,36 @@ def _pt2(pos, speed):
         s.add(l[var_str_x] == pos[i][0] + speed[i][0]*l[var_str_t])
         s.add(l[var_str_y] == pos[i][1] + speed[i][1]*l[var_str_t])
         s.add(l[var_str_z] == pos[i][2] + speed[i][2]*l[var_str_t])
-    if s.check() == sat:
-        m = s.model()
-        print(m[xr].as_long()+m[yr].as_long()+m[zr].as_long())
+    return s.check() == sat
+
+def _pt2(pos, speed):
+    #couldn't find a way to solve this without a SAT module
+    #used z3 as it's the best one for integer solutions
+    #rock equations 
+    #x = x0 + v_x*t
+    #y = y0 + v_y*t
+    #z = z0 + v_z*t
+    
+    for k in range(2, len(pos)):
+        xr,vxr,yr,vyr,zr,vzr = Ints('xr vxr yr vyr zr vzr')
+        s = Solver()
+        l = locals()
+        for i in range(k):
+            var_str_x = 'x'+str(i)
+            var_str_y = 'y'+str(i)
+            var_str_z = 'z'+str(i)
+            var_str_t = 't'+str(i)
+            l[var_str_x],l[var_str_y],l[var_str_z],l[var_str_t] = Ints(f'{var_str_x} {var_str_y} {var_str_z} {var_str_t}')
+            s.add(l[var_str_t] > 0)
+            s.add(l[var_str_x] == xr + vxr*l[var_str_t], l[var_str_y] == yr + vyr*l[var_str_t],l[var_str_z] == zr + vzr*l[var_str_t])
+            s.add(l[var_str_x] == pos[i][0] + speed[i][0]*l[var_str_t])
+            s.add(l[var_str_y] == pos[i][1] + speed[i][1]*l[var_str_t])
+            s.add(l[var_str_z] == pos[i][2] + speed[i][2]*l[var_str_t])
+        if s.check() == sat:
+            m = s.model()
+            if _check((m[xr], m[yr], m[zr], m[vxr], m[vyr], m[vzr]), pos, speed):
+                print(m[xr].as_long()+m[yr].as_long()+m[zr].as_long())
+                return
 
 def run():    
     pos = []
